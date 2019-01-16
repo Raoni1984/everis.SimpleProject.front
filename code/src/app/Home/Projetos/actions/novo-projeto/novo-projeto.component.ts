@@ -32,6 +32,7 @@ export class NovoProjetoComponent implements OnInit {
   totalSolicitacaoMudancas: number;
 
   ngOnInit() {
+
     this.arouter.paramMap.subscribe(res => {
       this.id = +res.get('id');
     });
@@ -67,13 +68,14 @@ export class NovoProjetoComponent implements OnInit {
     this.formDados.Adicionar();
     this.selectTab(1);
   }
-  selectTab(tabId: number) {
-    if (tabId == 1) {
-      this.formAtribuicaoEquipe.OpenView("teste")
-    } else if (tabId == 2) {
-      this.formAnexo.OpenView("teste")
-    }
-    this.alterarTabs.tabs[tabId].active = true;
+  selectTab(dados: any) {
+    // if (tabId == 1) {
+      let projeto: Projeto = JSON.parse(dados);
+      this.formAtribuicaoEquipe.OpenView(projeto);
+    // } else if (tabId == 2) {
+    //   this.formAnexo.OpenView("teste")
+    // }
+    this.alterarTabs.tabs[1].active = true;
   }
 
   novaSolicitacaoMudanca() {

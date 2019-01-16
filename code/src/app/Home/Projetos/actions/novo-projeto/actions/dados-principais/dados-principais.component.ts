@@ -58,9 +58,9 @@ export class DadosPrincipaisComponent implements OnInit {
     this.projeto.empresaId = values.empresaId;
     this.projeto.dataInicio = values.dataInicio;
     this.projeto.dataPrevista = values.dataPrevista;
-    this.projeto.qtdHorasServico1 = values.qtdHorasServico1 ? values.qtdHorasServico1.split(':')[0] : 0;
-    this.projeto.qtdHorasServico2 = values.qtdHorasServico2 ? values.qtdHorasServico2.split(':')[0] : 0;
-    this.projeto.qtdHorasServico3 = values.qtdHorasServico3 ? values.qtdHorasServico3.split(':')[0] : 0;
+    this.projeto.qtdHorasServico1 = values.qtdHorasServico1;
+    this.projeto.qtdHorasServico2 = values.qtdHorasServico2;
+    this.projeto.qtdHorasServico3 = values.qtdHorasServico3;
     this.projeto.escopoProjeto = values.escopoProjeto;
     this.projeto.foraEscopoProjeto = values.foraEscopoProjeto;
     this.projeto.premissas = values.premissas;
@@ -82,21 +82,25 @@ export class DadosPrincipaisComponent implements OnInit {
 
   Adicionar() {
     this.obterDadosForm();
-    this.svc.salvar(this.projeto, Projeto)
-      .toPromise().then((data: any) => {
-        switch (data.codigo) {
-          case 200:
-            window.alert('Projeto adicionado com sucesso!');
-            this.getProjeto.emit("1");
-            break;
-          default:
-            window.alert('erro: ' + data.mensagem);
-            break;
-        }
-      },
-        error => {
-          alert('Erro ao tentar adicionar.');
-        });
+    if (this.projeto.id > 0) {
+      this.svc.salvar(this.projeto, Projeto)
+        .toPromise().then((data: any) => {
+          switch (data.codigo) {
+            case 200:
+              window.alert('Projeto adicionado com sucesso!');
+              this.getProjeto.emit(JSON.stringify(this.projeto));
+              break;
+            default:
+              window.alert('erro: ' + data.mensagem);
+              break;
+          }
+        },
+          error => {
+            alert('Erro ao tentar adicionar.');
+          });
+    } else {
+      this.getProjeto.emit(JSON.stringify(this.projeto));
+    }
   }
 
   cancelar() {
